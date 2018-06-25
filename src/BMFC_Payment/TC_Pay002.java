@@ -25,8 +25,6 @@ public class TC_Pay002 {
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-
-
     }
 
     @Test
