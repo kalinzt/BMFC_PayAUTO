@@ -61,13 +61,6 @@ public class TC_Pay002 {
 
         driver.switchTo().window(parentHandle); // 원래 윈도우 창으로 핸들 스위칭
 
-       // if ("새벽배송".equals(driver.findElement(By.xpath("//*[@id=\"order_delivery_memo\"]/td/ul/li[1]/span/label")).getText())) {
-       //     driver.findElement(By.xpath("//*[@id=\"door_number\"]/td/input")).sendKeys("1234*");
-       //     //새벽배송 가능 지역인 경우 공동출입문 비밀번호 입력
-       //     assertTrue(true);
-       //     return;
-       // }
-
         driver.findElement(By.xpath("//*[@id=\"pay_type4\"]")).click(); //무통장 클릭
         driver.findElement(By.xpath("//*[@id=\"agree_order_chk\"]")).click(); //구매조건 동의
         driver.findElement(By.xpath("//*[@id=\"order1\"]/button")).click(); //결제하기
