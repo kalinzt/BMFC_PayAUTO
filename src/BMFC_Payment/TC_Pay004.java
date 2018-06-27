@@ -15,7 +15,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class TC_Pay003 {
+public class TC_Pay004 {
     private WebDriver driver;
     private StringBuffer verificationErrors = new StringBuffer();
 
@@ -28,27 +28,35 @@ public class TC_Pay003 {
     }
 
     @Test
-    public void p_003() throws Exception {
+    public void p_004() throws Exception {
+
+        //테스트환경(QA 환경에서 테스트시 URL 변경 : Alpha, Beta)
         driver.get("http://baeminchan.com");
 
-        driver.findElement(By.xpath("//*[@id=\"search_str\"]")).sendKeys("반찬"); //반찬 검색어 입력
-        driver.findElement(By.xpath("//*[@id=\"header_wrap\"]/div/form/button")).click(); // 검색버튼 클릭
-        driver.findElement(By.xpath("//*[@id=\"products\"]/li[1]/div/a")).click(); // 검색결과 첫번째 상품 클릭
-        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/button")).click(); //장바구니담기
-        driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[7]/a")).click(); //GNB장바구니 클릭 (비 로그인상태)
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("//*[@id=\"btn_select_receipt_date\"]")).click(); //희망배송일 선택
+        //사전조건
+        driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[1]/a")).click(); //GNB 로그인 버튼 클릭
         driver.findElement(By.xpath("//*[@id=\"member_id\"]")).sendKeys("kalinzt@gmail.com"); //아이디 입력
         driver.findElement(By.xpath("//*[@id=\"pwd\"]")).sendKeys("worud1029"); //패스워드 입력
         driver.findElement(By.xpath("//*[@id=\"login\"]/div[1]/form/fieldset/button")).click(); //로그인 버튼 클릭
+        driver.findElement(By.xpath("//*[@id=\"search_str\"]")).sendKeys("집밥"); //집밥 검색어 입력
+        driver.findElement(By.xpath("//*[@id=\"header_wrap\"]/div/form/button")).click(); // 검색버튼 클릭
+        driver.findElement(By.xpath("//*[@id=\"products\"]/li[1]/div/a")).click(); // 검색결과 첫번째 상품 클릭
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/div/dl/dd/div/label/input")).clear();
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/div/dl/dd/div/label/input")).sendKeys("5");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/button")).click(); //장바구니담기
+        driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[6]/a")).click(); //GNB장바구니 클릭
         driver.findElement(By.xpath("//*[@id=\"btn_select_receipt_date\"]")).click(); //희망배송일 선택
-        driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/div[2]/div[2]/button")).click(); //주문하기 클릭
-        Thread.sleep(3000);
-
-        //배송지 변경
-        driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/div[5]/div[1]/ul/li[2]")).click(); //최근배송지 탭 클릭
         Thread.sleep(1000);
-        driver.findElement(By.xpath("//*[@id=\"tab2\"]/ul/li[3]/div[2]/button[1]")).click(); //두번째 최근배송지 클릭
+        driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/div[2]/div[2]/button")).click(); //주문하기 클릭
+        Thread.sleep(2000);
+
+        //쿠폰선택
+        driver.findElement(By.cssSelector("#ordFrm > table.tb_order_style > tbody > tr > td:nth-child(8) > button")).click(); //쿠폰선택
+        driver.findElement(By.cssSelector("#coupon-list-tbl > tbody > tr:nth-child(1) > td:nth-child(1) > span > label")).click(); //보유한쿠폰선택
+        driver.findElement(By.cssSelector("#coupon_apply")).click();//쿠폰 적용
+        Thread.sleep(1000);
+        Alert alert0 = driver.switchTo().alert();
+        alert0.accept();
         Thread.sleep(1000);
 
         //주문필수 스크립트(상품조건별로 노출되는 체크박스 제어)
@@ -95,7 +103,9 @@ public class TC_Pay003 {
         Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[1]/a")).click(); //로그아웃
 
-}
+
+    }
+
     @After
     public void tearDown() throws Exception {
         driver.quit();

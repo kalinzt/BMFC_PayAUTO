@@ -28,8 +28,8 @@ public class TC_Pay001 {
     }
 
     @Test
-    public void p_002() throws Exception {
-        driver.get("http://baeminchan.com");
+    public void p_001() throws Exception {
+        driver.get("https://www.baeminchan.com");
 
         driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[1]/a")).click(); //GNB 로그인 버튼 클릭
         driver.findElement(By.xpath("//*[@id=\"member_id\"]")).sendKeys("kalinzt@gmail.com"); //아이디 입력
@@ -40,14 +40,27 @@ public class TC_Pay001 {
         driver.findElement(By.xpath("//*[@id=\"products\"]/li[1]/div/a")).click(); // 검색결과 첫번째 상품 클릭
         driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/button")).click(); //장바구니담기
         driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[6]/a")).click(); //GNB장바구니 클릭
+        Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"btn_select_receipt_date\"]")).click(); //희망배송일 선택
         driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/div[2]/div[2]/button")).click(); //주문하기 클릭
-        Thread.sleep(2000);
-        driver.findElement(By.xpath("//*[@id=\"door_number_pass\"]/td/ul/li[2]/span/label")).click(); //별도 출입 제한 없음
+        Thread.sleep(3000);
+
+        //주문필수 스크립트(상품조건별로 노출되는 체크박스 제어)
+        //불필요한 물류데이터를 방지하기 위해 무통장 결제만 사용함
+        if(driver.findElement(By.xpath("//*[@id=\"order_delivery_memo\"]/td")).getText().equalsIgnoreCase("새벽배송")) {
+            driver.findElement(By.xpath("//*[@id=\"door_number\"]/td/input")).sendKeys("2325*");
+            return;
+        } //새벽배송 비번입력
         driver.findElement(By.xpath("//*[@id=\"pay_type4\"]")).click(); //무통장 클릭
-        driver.findElement(By.xpath("//*[@id=\"agree_order_chk\"]")).click(); //구매조건 동의
+        if(driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/ul/li[1]")).getText().equalsIgnoreCase("전체동의")) {
+            driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/ul/li[1]/span/label/strong")).click(); //구매조건 동의 외 체크박스 존재시 전체동의 체크
+        } else {
+            driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/ul/li/span/label")).click(); //구매조건 동의
+        }
         driver.findElement(By.xpath("//*[@id=\"order1\"]/button")).click(); //결제하기
         Thread.sleep(3000);
+
+        //PG module 제어 (무통장)
         driver.switchTo().frame(1);
         driver.findElement(By.cssSelector("#assentAll")).click(); //PG전체동의
         driver.findElement(By.cssSelector("#main_agreed_info > div > p.progressBtn > a")).click(); //PG다음
@@ -59,13 +72,13 @@ public class TC_Pay001 {
         Thread.sleep(2000);
         driver.findElement(By.cssSelector("#LGD_NEXT > a")).click(); //PG다음2
         Thread.sleep(2000);
+
+        //주문취소
         driver.findElement(By.xpath("//*[@id=\"orderFinish\"]/div/div/button[1]/span")).click(); //주문배송조회 클릭
         Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"order_subscription\"]/table/tbody/tr[1]/td[3]/p[1]/a")).click(); //첫주문내역 클릭
         driver.findElement(By.xpath("//*[@id=\"order_detail\"]/table[2]/tbody/tr[4]/td/a[1]")).click(); //결제취소 클릭
         Thread.sleep(2000);
-
-        //Alert Close
         Alert alert1 = driver.switchTo().alert();
         alert1.accept();
         Thread.sleep(1000);
