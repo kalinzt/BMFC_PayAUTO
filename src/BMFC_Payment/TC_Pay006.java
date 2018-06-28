@@ -1,13 +1,8 @@
 package BMFC_Payment;
 
-import static org.junit.Assert.fail;
-
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.After;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +10,12 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class TC_Pay002 {
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import static org.junit.Assert.fail;
+
+public class TC_Pay006 {
     private WebDriver driver;
     private StringBuffer verificationErrors = new StringBuffer();
 
@@ -28,7 +28,7 @@ public class TC_Pay002 {
     }
 
     @Test
-    public void p_002() throws Exception {
+    public void p_006() throws Exception {
         driver.get("http://baeminchan.com");
 
         driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[1]/a")).click(); //GNB 로그인 버튼 클릭
@@ -38,28 +38,32 @@ public class TC_Pay002 {
         driver.findElement(By.xpath("//*[@id=\"search_str\"]")).sendKeys("집밥"); //집밥 검색어 입력
         driver.findElement(By.xpath("//*[@id=\"header_wrap\"]/div/form/button")).click(); // 검색버튼 클릭
         driver.findElement(By.xpath("//*[@id=\"products\"]/li[1]/div/a")).click(); // 검색결과 첫번째 상품 클릭
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/div/dl/dd/div/label/input")).clear();
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/div/dl/dd/div/label/input")).sendKeys("5");
         driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/button")).click(); //장바구니담기
         driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[6]/a")).click(); //GNB장바구니 클릭
         driver.findElement(By.xpath("//*[@id=\"btn_select_receipt_date\"]")).click(); //희망배송일 선택
         driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/div[2]/div[2]/button")).click(); //주문하기 클릭
+        Thread.sleep(2000);
 
-        //신규 주소 입력(팝업 윈도우 제어)
-        String parentHandle = driver.getWindowHandle(); // 현재 윈도우를 부모핸들로 지정
-        driver.findElement(By.xpath("//*[@id=\"delivery_address_container\"]/td/div[1]/button")).click(); //주소찾기
-        for (String winHandle : driver.getWindowHandles()) {
-            driver.switchTo().window(winHandle); // 신규 윈도우를 찾으면 해당 윈도우로 핸들 스위칭
-        }
+        //쿠폰선택
+        driver.findElement(By.cssSelector("#ordFrm > table.tb_order_style > tbody > tr > td:nth-child(8) > button")).click(); //쿠폰선택
+        driver.findElement(By.cssSelector("#coupon-list-tbl > tbody > tr:nth-child(1) > td:nth-child(1) > span > label")).click(); //보유한쿠폰선택
+        driver.findElement(By.cssSelector("#coupon_apply")).click();//쿠폰 적용
         Thread.sleep(1000);
-        driver.findElement(By.xpath("//*[@id=\"frmStreetSearch\"]/label/input")).sendKeys("면목동 183-55"); //동백동 검색
-        driver.findElement(By.xpath("//*[@id=\"frmStreetSearch\"]/button")).click(); //검색버튼 클릭
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("//*[@id=\"streetList\"]/tr[1]/td[2]/p[1]/a")).click(); //검색 결과 클릭
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("//*[@id=\"contents\"]/form/fieldset/label[3]/input")).sendKeys("301"); //나머지 주소 입력
-        driver.findElement(By.xpath("//*[@id=\"contents\"]/div/button[2]")).click();  //완료버튼 클릭
-        driver.switchTo().window(parentHandle); // 원래 윈도우 창으로 핸들 스위칭
+        Alert alert0 = driver.switchTo().alert();
+        alert0.accept();
         Thread.sleep(1000);
 
+        //보유포인트 전액 사용하기(포인트 잔액 충족하지 않음)
+        driver.findElement(By.xpath("//*[@id=\"milage_prc\"]")).clear();
+        String a = driver.findElement(By.xpath("//*[@id=\"total_order_price_pay\"]")).getText();
+        driver.findElement(By.xpath("//*[@id=\"milage_prc\"]")).sendKeys(a);
+        driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/div[1]/div[2]/div/dl[2]/dd[1]/button")).click();
+        Thread.sleep(1000);
+        Alert alert1 = driver.switchTo().alert();
+        alert1.accept();
+        Thread.sleep(1000);
 
         //주문필수 스크립트(상품조건별로 노출되는 체크박스 제어)
         //불필요한 물류데이터를 방지하기 위해 무통장 결제만 사용함
@@ -95,15 +99,16 @@ public class TC_Pay002 {
         driver.findElement(By.xpath("//*[@id=\"order_subscription\"]/table/tbody/tr[1]/td[3]/p[1]/a")).click(); //첫주문내역 클릭
         driver.findElement(By.xpath("//*[@id=\"order_detail\"]/table[2]/tbody/tr[4]/td/a[1]")).click(); //결제취소 클릭
         Thread.sleep(2000);
-        Alert alert1 = driver.switchTo().alert();
-        alert1.accept();
-        Thread.sleep(2000);
         Alert alert2 = driver.switchTo().alert();
         alert2.accept();
+        Thread.sleep(2000);
+        Alert alert3 = driver.switchTo().alert();
+        alert3.accept();
         Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"header_wrap\"]/div/h1/a/img")).click(); //메인화면가기
         Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[1]/a")).click(); //로그아웃
+
 
     }
 
@@ -122,5 +127,3 @@ public class TC_Pay002 {
         return true;
     }
 }
-
-

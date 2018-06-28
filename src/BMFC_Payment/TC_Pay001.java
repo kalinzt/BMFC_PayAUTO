@@ -46,7 +46,7 @@ public class TC_Pay001 {
         Thread.sleep(3000);
 
         //주문필수 스크립트(상품조건별로 노출되는 체크박스 제어)
-        //불필요한 물류데이터를 방지하기 위해 무통장 결제만 사용함
+        //불필요한 물류데이터를 방지하기 위해 무통장 결제만 사용함(라이브기준)
         if(driver.findElement(By.xpath("//*[@id=\"order_delivery_memo\"]/td")).getText().equalsIgnoreCase("새벽배송")) {
             driver.findElement(By.xpath("//*[@id=\"door_number\"]/td/input")).sendKeys("2325*");
             return;
@@ -58,7 +58,7 @@ public class TC_Pay001 {
             driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/ul/li/span/label")).click(); //구매조건 동의
         }
         driver.findElement(By.xpath("//*[@id=\"order1\"]/button")).click(); //결제하기
-        Thread.sleep(3000);
+        Thread.sleep(4000);
 
         //PG module 제어 (무통장)
         driver.switchTo().frame(1);
@@ -81,7 +81,7 @@ public class TC_Pay001 {
         Thread.sleep(2000);
         Alert alert1 = driver.switchTo().alert();
         alert1.accept();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         Alert alert2 = driver.switchTo().alert();
         alert2.accept();
         Thread.sleep(1000);

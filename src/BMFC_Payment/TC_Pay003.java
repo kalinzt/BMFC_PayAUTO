@@ -43,7 +43,7 @@ public class TC_Pay003 {
         driver.findElement(By.xpath("//*[@id=\"login\"]/div[1]/form/fieldset/button")).click(); //로그인 버튼 클릭
         driver.findElement(By.xpath("//*[@id=\"btn_select_receipt_date\"]")).click(); //희망배송일 선택
         driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/div[2]/div[2]/button")).click(); //주문하기 클릭
-        Thread.sleep(3000);
+        Thread.sleep(4000);
 
         //배송지 변경
         driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/div[5]/div[1]/ul/li[2]")).click(); //최근배송지 탭 클릭
@@ -87,7 +87,7 @@ public class TC_Pay003 {
         Thread.sleep(2000);
         Alert alert1 = driver.switchTo().alert();
         alert1.accept();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         Alert alert2 = driver.switchTo().alert();
         alert2.accept();
         Thread.sleep(1000);

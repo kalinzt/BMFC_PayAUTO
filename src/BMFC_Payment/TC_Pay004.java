@@ -72,7 +72,7 @@ public class TC_Pay004 {
             driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/ul/li/span/label")).click(); //구매조건 동의
         }
         driver.findElement(By.xpath("//*[@id=\"order1\"]/button")).click(); //결제하기
-        Thread.sleep(3000);
+        Thread.sleep(4000);
 
         //PG module 제어 (무통장)
         driver.switchTo().frame(1);
@@ -95,7 +95,7 @@ public class TC_Pay004 {
         Thread.sleep(2000);
         Alert alert1 = driver.switchTo().alert();
         alert1.accept();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         Alert alert2 = driver.switchTo().alert();
         alert2.accept();
         Thread.sleep(1000);
