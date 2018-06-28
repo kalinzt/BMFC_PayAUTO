@@ -56,6 +56,7 @@ public class TC_Pay007 {
         Thread.sleep(1000);
 
         //보유포인트 전액 사용하기(포인트 잔액 충족하지 않음)
+        driver.findElement(By.xpath("//*[@id=\"milage_prc\"]")).clear();
         String a = driver.findElement(By.xpath("//*[@id=\"total_order_price_pay\"]")).getText();
         driver.findElement(By.xpath("//*[@id=\"milage_prc\"]")).sendKeys(a);
         driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/div[1]/div[2]/div/dl[2]/dd[1]/button")).click();
