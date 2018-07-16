@@ -15,7 +15,7 @@ import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.fail;
 
-public class TC_Pay010 {
+public class TC_Pay011 {
     private WebDriver driver;
     private StringBuffer verificationErrors = new StringBuffer();
 
@@ -48,15 +48,22 @@ public class TC_Pay010 {
         driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/div[2]/div[2]/button")).click(); //주문하기 클릭
         Thread.sleep(3000);
 
+        //쿠폰선택
+        driver.findElement(By.cssSelector("#ordFrm > table.tb_order_style > tbody > tr > td:nth-child(8) > button")).click(); //쿠폰선택
+        driver.findElement(By.cssSelector("#coupon-list-tbl > tbody > tr:nth-child(1) > td:nth-child(1) > span > label")).click(); //보유한쿠폰선택
+        driver.findElement(By.cssSelector("#coupon_apply")).click();//쿠폰 적용
+        Thread.sleep(1000);
+        Alert alert0 = driver.switchTo().alert();
+        alert0.accept();
+        Thread.sleep(1000);
+
         //보유 포인트 전액 사용하기
         //getText로 받은 문자열을 정수로 변환 및 천단위 콤마 제거
         driver.findElement(By.xpath("//*[@id=\"milage_prc\"]")).clear();
-
         String a = driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/div[1]/div[2]/div/dl[2]/dt[1]/p/span")).getText(); //보유포인트
         a = a.replaceAll(",", "");
         int ordFrm = Integer.parseInt(a);
         //System.out.println(ordFrm);
-
         String b = driver.findElement(By.xpath("//*[@id=\"total_order_price_pay\"]")).getText(); //결제총액
         b = b.replaceAll(",", "");
         int totalPay = Integer.parseInt(b);

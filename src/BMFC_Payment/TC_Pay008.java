@@ -97,16 +97,6 @@ public class TC_Pay008 {
         Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[1]/a")).click(); //로그아웃
 
-        // text check
-        //if ("주문이 정상적으로 완료되었습니다!".equals(driver.findElement(By.xpath("//*[@id=\"orderFinish\"]/div/h2")).getText())) {
-        //System.out.println("PASS");
-        //assertTrue(true);
-        //return;
-        //} else {
-        //System.out.println("FAIL");
-        //assertTrue(false);
-        //}
-
     }
 
     @After
