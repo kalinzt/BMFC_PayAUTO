@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="main" type="AntRunConfiguration" factoryName="Ant Target">
+    <antsettings antfile="file://$USER_HOME$/Desktop/Selenium/test/build.xml" target="main" />
+    <method />
+  </configuration>
+</component>

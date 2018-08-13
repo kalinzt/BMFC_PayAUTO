@@ -21,7 +21,7 @@ public class TC_Pay011 {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();
@@ -36,13 +36,14 @@ public class TC_Pay011 {
         driver.findElement(By.xpath("//*[@id=\"member_id\"]")).sendKeys("kalinzt@gmail.com"); //아이디 입력
         driver.findElement(By.xpath("//*[@id=\"pwd\"]")).sendKeys("worud1029"); //패스워드 입력
         driver.findElement(By.xpath("//*[@id=\"login\"]/div[1]/form/fieldset/button")).click(); //로그인 버튼 클릭
-        driver.findElement(By.xpath("//*[@id=\"search_str\"]")).sendKeys("반찬"); //집밥 검색어 입력
+        driver.findElement(By.xpath("//*[@id=\"search_str\"]")).sendKeys("반찬"); //검색어 입력
         driver.findElement(By.xpath("//*[@id=\"header_wrap\"]/div/form/button")).click(); // 검색버튼 클릭
         driver.findElement(By.xpath("//*[@id=\"products\"]/li[1]/div/a")).click(); // 검색결과 첫번째 상품 클릭
-        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/div/dl/dd/div/label/input")).clear();
-        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/div/dl/dd/div/label/input")).sendKeys("10");
         driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div[2]/div/form/fieldset/button")).click(); //장바구니담기
         driver.findElement(By.xpath("//*[@id=\"lnb\"]/ul/li[6]/a")).click(); //GNB장바구니 클릭
+        driver.findElement(By.xpath("//*[@id=\"cartFrm\"]/table/tbody/tr/td[5]/div/label/input")).clear();
+        driver.findElement(By.xpath("//*[@id=\"cartFrm\"]/table/tbody/tr/td[5]/div/label/input")).sendKeys("10");
+        driver.findElement(By.xpath("//*[@id=\"cartFrm\"]/table/tbody/tr/td[5]/button")).click(); //수량변경
         Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"btn_select_receipt_date\"]")).click(); //희망배송일 선택
         driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/div[2]/div[2]/button")).click(); //주문하기 클릭
@@ -50,12 +51,23 @@ public class TC_Pay011 {
 
         //쿠폰선택
         driver.findElement(By.cssSelector("#ordFrm > table.tb_order_style > tbody > tr > td:nth-child(8) > button")).click(); //쿠폰선택
-        driver.findElement(By.cssSelector("#coupon-list-tbl > tbody > tr:nth-child(1) > td:nth-child(1) > span > label")).click(); //보유한쿠폰선택
-        driver.findElement(By.cssSelector("#coupon_apply")).click();//쿠폰 적용
-        Thread.sleep(1000);
-        Alert alert0 = driver.switchTo().alert();
-        alert0.accept();
-        Thread.sleep(1000);
+        Thread.sleep(3000);
+
+        boolean isExist;
+        //팝업닫기
+        isExist = existElement(driver,By.cssSelector("#coupon-list-tbl > tbody > tr > td"), "적용 가능한 쿠폰이 없습니다.");
+        if (isExist) { driver.findElement(By.xpath("//*[@id=\"coupon_apply_cancel\"]")).click();
+            System.out.println("쿠폰없음");
+            } else {
+            driver.findElement(By.cssSelector("#coupon-list-tbl > tbody > tr:nth-child(1) > td:nth-child(1) > span > label")).click(); //보유한쿠폰선택
+            driver.findElement(By.cssSelector("#coupon_apply")).click();//쿠폰 적용
+            Thread.sleep(1000);
+            Alert alert0 = driver.switchTo().alert();
+            alert0.accept();
+            Thread.sleep(1000);
+            System.out.println("쿠폰있음");
+            Thread.sleep(3000);
+        }
 
         //보유 포인트 전액 사용하기
         //getText로 받은 문자열을 정수로 변환 및 천단위 콤마 제거
@@ -63,11 +75,11 @@ public class TC_Pay011 {
         String a = driver.findElement(By.xpath("//*[@id=\"ordFrm\"]/div[1]/div[2]/div/dl[2]/dt[1]/p/span")).getText(); //보유포인트
         a = a.replaceAll(",", "");
         int ordFrm = Integer.parseInt(a);
-        //System.out.println(ordFrm);
+        System.out.println(ordFrm);
         String b = driver.findElement(By.xpath("//*[@id=\"total_order_price_pay\"]")).getText(); //결제총액
         b = b.replaceAll(",", "");
         int totalPay = Integer.parseInt(b);
-        //System.out.println(totalPay);
+        System.out.println(totalPay);
 
         if (ordFrm > totalPay) {
             driver.findElement(By.xpath("//*[@id=\"milage_prc\"]")).sendKeys(b);
@@ -134,10 +146,12 @@ public class TC_Pay011 {
     }
 
     public boolean existElement(WebDriver wd, By by, String meaning) throws TimeoutException {
+        driver = wd;
         WebDriverWait wait = new WebDriverWait(wd, 2);
         wait.until(ExpectedConditions.presenceOfElementLocated(by));
         return true;
     }
+
 }
 
 

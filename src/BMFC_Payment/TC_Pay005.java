@@ -10,7 +10,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.naming.ldap.Rdn;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 

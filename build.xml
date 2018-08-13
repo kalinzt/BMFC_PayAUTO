@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<project name="JUNIT" default="main" basedir="/Users/cerari/IdeaProjects/BMFC_PayAUTO/target/classes/BMFC_Payment">
+
+    <property name="test.class.dir" location="/Users/cerari/IdeaProjects/BMFC_PayAUTO/target/classes/BMFC_Payment" />
+    <property name="test.report.dir" location="/Users/cerari/IdeaProjects/BMFC_PayAUTO/target/classes/BMFC_Payment/testreport" />
+
+
+    <path id="junit.class.path">
+        <fileset dir="/Users/cerari/IdeaProjects/BMFC_PayAUTO/target/classes/BMFC_Payment/lib">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="makedir">
+        <mkdir dir="${test.report.dir}" />
+    </target>
+
+
+    <target name="junit" depends="makedir">
+
+        <junit printsummary="on" fork="true" haltonfailure="no" failureproperty="test.failed">
+            <classpath refid="junit.class.path" />
+            <classpath>
+                <pathelement location="${test.class.dir}"/>
+            </classpath>
+
+            <!-- 파라미터 파일 설정하는 부분
+            java -Dsmart.properties=C:\Users\Administrator\workspace\Selenium_WebDriver\smart.properties 같은 역할을 함
+
+            <sysproperty key="smart.properties" value="E:\Login_Test\bin\smart.properties" /> -->
+            <formatter type="xml" />
+            <batchtest todir="${test.report.dir}">
+                <fileset dir="${test.class.dir}">
+                    <include name="**/TC_*.class" />
+                </fileset>
+
+            </batchtest>
+        </junit>
+
+    </target>
+
+    <target name="main" depends="junit">
+        <description>Main target</description>
+
+    </target>
+
+</project>
